@@ -5,8 +5,10 @@ __pycache__/
 
 # C extensions
 *.so
-
+/ffmpeg-2023-06-27-git-9b6d191a66-full_build
 # Distribution / packaging
+/dcbot
+requirements.txt
 .Python
 build/
 develop-eggs/
