@@ -22,9 +22,11 @@ To run Prometheus on your Discord server, you'll need to follow these steps:
 1. Clone this repository to your local machine.
 2. Install the required dependencies (if any) for the Python bot.
 3. Set up a new Discord application and obtain a bot token from the Discord Developer Portal.
-4. Create a `.env` file in the root directory and add your bot token as follows: 
-    DISCORD_TOKEN=your_discord_bot_token_here
+4. Configure config.json File:
+- Create a config.json file in the root directory of the cloned repository.
+- Inside the config.json file, add your bot token like this:  `BOT_TOKEN = your_bot_token`
 5. Start the Python bot using the appropriate command for your bot script.
+6. Invite the Bot to Your Server:
 
 ## Usage
 
