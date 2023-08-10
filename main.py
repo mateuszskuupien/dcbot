@@ -4,7 +4,7 @@ from discord.ext import commands, tasks
 
 intents = discord.Intents().all()
 client = commands.Bot(command_prefix='!', intents=intents, help_command=None, activity=discord.Activity(type=discord.ActivityType.listening, name="\U0001FA90 \n prometheusbot.com \U0001FA90 | \u2757help"))
-
+voice_clients= {}
 with open("config.json") as f:
     data = json.load(f)
 TOKEN = data["BOT_TOKEN"]
@@ -17,14 +17,19 @@ async def on_command_error(ctx, error):
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user.name} ({client.user.id})")
-    channel = client.get_channel(1128026026992226434)
-    await channel.send("Bot connection established successfully.<:satellite:1138796453343535164>")
 
+@client.event
+async def on_member_join(member):
+    channel = member.guild.system_channel
+    if channel:
+        await channel.send(f"Embrace wisdom, new traveler! ♆ {member.mention}! ♆")
 
 @client.command()
 async def join(ctx):
     try:
-        if ctx.voice_client is not None and ctx.voice_client.is_connected():
+        if ctx.voice_client and ctx.voice_client.channel == ctx.author.voice.channel:
+            await ctx.send("We are on the same channel already...")
+        elif ctx.voice_client is not None and ctx.voice_client.is_connected():
             await ctx.voice_client.move_to(ctx.author.voice.channel)
         else:
             await ctx.author.voice.channel.connect()
@@ -53,5 +58,5 @@ async def help(ctx):
     embed.add_field(name="", value="\u200b")
     embed.set_footer(text="Immortality is not the absence of death, but rather the eternal presence of one's deeds and legacy.")
     await ctx.send(embed=embed)
-    
+
 client.run(TOKEN)
