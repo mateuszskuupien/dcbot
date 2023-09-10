@@ -4,19 +4,49 @@ from discord.ext import commands, tasks
 
 intents = discord.Intents().all()
 client = commands.Bot(command_prefix='!', intents=intents, help_command=None, activity=discord.Activity(type=discord.ActivityType.listening, name="\U0001FA90 \n prometheusbot.com \U0001FA90 | \u2757help"))
-voice_clients= {}
 with open("config.json") as f:
     data = json.load(f)
 TOKEN = data["BOT_TOKEN"]
+
+@client.event
+async def on_ready():
+    print("Prometheus is online.")
 
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.reply("**Invalid command. Try using** `!help` **to figure out commands!**")
 
+@client.command()
+async def ticket(ctx):
+    category = discord.utils.get(ctx.guild.categories, name='Tickets')
+    if not category:
+        category = await ctx.guild.create_category('Tickets')
+
+    overwrites = {
+        ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        ctx.author: discord.PermissionOverwrite(read_messages=True)
+    }
+    channel = await category.create_text_channel(f'ticket-{ctx.author.display_name}', overwrites=overwrites)
+    await channel.send(f"{ctx.author.mention} You have opened a new ticket! Our team will respond as quickly as possible.")
+
 @client.event
-async def on_ready():
-    print(f"Logged in as {client.user.name} ({client.user.id})")
+async def on_raw_reaction_add(payload):
+    if payload.emoji.name == "❌":
+        channel = client.get_channel(payload.channel_id)
+        user = payload.member
+
+        def is_administrator(user):
+            return user.guild_permissions.administrator
+        if is_administrator(user):
+            if channel.category and channel.category.name == "Tickets":
+                await channel.delete()
+            elif channel.category.name != "Tickets":
+                pass
+        elif channel.category and channel.category.name == "Tickets":
+            await user.send("You do not have permission to delete this ticket.")
+        else:
+            pass
 
 @client.event
 async def on_member_join(member):
