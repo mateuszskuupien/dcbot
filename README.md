@@ -1,10 +1,9 @@
 # Prometheus Discord Bot
 
-Prometheus is a simple Discord bot written in Python that offers four basic commands: `!leave`, `!help`, `!join`, and `!ping` (ping pong).
+Prometheus is a simple Discord bot written in Python that offers basic commands: `!leave`, `!help`, `!join`, `!ticket` and `!ping` (ping pong). It has also a `ticket system` and `role-assign system` which can be really helpful for administrators.
 
 ## Table of Contents
 - [Introduction](#introduction)
-- [Features](#features)
 - [Setup](#setup)
 - [Usage](#usage)
 - [Commands](#commands)
@@ -49,6 +48,10 @@ Once Prometheus is up and running on your server, you can start using its comman
 - **!ping**
   - Description: Play a quick game of ping pong with the bot.
   - Usage: `!ping`
+
+- **!ticket**
+  - Description: Ticket system, after typing the command it creates a channel where administration can help you.
+  - Usage: `!ticket`
 
 ## Contributing
 
