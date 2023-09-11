@@ -10,7 +10,44 @@ TOKEN = data["BOT_TOKEN"]
 
 @client.event
 async def on_ready():
-    print("Prometheus is online.")
+    reactions = ["✅","👦","👩‍🦰","🎵"]
+    channel = client.get_channel(1150447506350678098)
+    if channel.last_message == 1150446567485087914:
+        pass
+    else:    
+        message = await channel.send("To access more advanced options for this server, choose the roles you need!")
+        for reaction in reactions:
+            await message.add_reaction(reaction)
+
+@client.event
+async def on_reaction_add(reaction, user):
+    channel_id = 1150447506350678098
+    emoji_to_role = {
+        "✅": "Verified",
+        "👦": "Male",
+        "👩‍🦰": "Female",
+        "🎵": "Music"
+    }
+    if reaction.message.channel.id == channel_id and reaction.emoji in emoji_to_role:
+        role_name = emoji_to_role[reaction.emoji]
+        role = discord.utils.get(user.guild.roles, name=role_name)
+        if role:
+            await user.add_roles(role)
+
+@client.event
+async def on_reaction_remove(reaction, user):
+    channel_id = 1150447506350678098
+    emoji_to_role = {
+        "✅": "Verified",
+        "👦": "Male",
+        "👩‍🦰": "Female",
+        "🎵": "Music"
+    }
+    if reaction.message.channel.id == channel_id and reaction.emoji in emoji_to_role:
+        role_name = emoji_to_role[reaction.emoji]
+        role = discord.utils.get(user.guild.roles, name=role_name)
+        if role:
+            await user.remove_roles(role)
 
 @client.event
 async def on_command_error(ctx, error):
